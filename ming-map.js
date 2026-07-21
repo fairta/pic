@@ -1661,7 +1661,7 @@ async function fetchGeoJSON(adcode) {
             if (adcode === '100000') {
                 url = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
             } else if (adcode === '710000') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/pic@main/tw.json'; // 台湾1634专属数据源
+                url = 'https://cdn.jsdelivr.net/gh/fairta/pic@main/map/tw.json'; // 台湾1634专属数据源
             } else {
                 url = `https://geo.datav.aliyun.com/areas_v3/bound/${adcode}_full.json`;
             }
