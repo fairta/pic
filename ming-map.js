@@ -1,11 +1,10 @@
-// === loader.js 完整结构 ===
-
-// 1. 保留你原代码最顶部的变量声明
 const MAP_FRAME_ID = 'ming-dynasty-map-frame';
 const LAMP_ID = 'ming-map-lamp';
 const STORAGE_PREFIX = 'ming-map:';
 
-// =========================================================================
+// ==========================================
+// 地图核心数据常量与映射
+// ==========================================
 const GEO_NAME_DISPLAY = {
     '山东布政使司': '山东', '山西布政使司': '山西', '河南布政使司': '河南',
     '陕西布政使司': '陕西', '陕西行都司': '陕西',
@@ -1662,7 +1661,7 @@ async function fetchGeoJSON(adcode) {
             if (adcode === '100000') {
                 url = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
             } else if (adcode === '710000') {
-                url = 'https://cdn.jsdelivr.net/gh/fairta/pic@main/tw.json'; // 台湾1634专属数据源  
+                url = 'https://cdn.jsdelivr.net/gh/fairta/pic@main/tw.json'; // 台湾1634专属数据源
             } else {
                 url = `https://geo.datav.aliyun.com/areas_v3/bound/${adcode}_full.json`;
             }
@@ -3685,34 +3684,16 @@ function bootstrapMingMap() {
     mingMapSyncTimer = setInterval(mingMapSyncHeroLocation, 2500);
     setTimeout(mingMapSyncHeroLocation, 500);
 }
-// =========================================================================
 
-// ... 在这里粘贴原有的数据字典、辅助函数、render 函数、DOM 操作函数等 ...
-
-function bootstrapMingMap() {
-    // ... 原来的 bootstrapMingMap 函数内容 ...
-}
-
-
-// =========================================================================
-// 3. 【关键修改】删除原代码最后一行的 `bootstrapMingMap();`
-// 替换为以下的 ES Module 导出规范：
-// =========================================================================
-export async function boot(target) {
-    // 这里我们定义 target 为 'ming-map'，代表启动地图模块
-    if (target === 'ming-map') {
-        try {
-            console.log('[残明余烬] 正在初始化大明地图模块...');
-            
-            // 执行你原本的地图生成逻辑
-            bootstrapMingMap(); 
-            
-            console.log('[残明余烬] 大明地图加载成功！');
-        } catch (error) {
-            console.error('[残明余烬] 大明地图加载失败:', error);
-            throw error;
-        }
-    } else {
-        console.warn(`未知的加载目标: ${target}`);
+export function bootMap() {
+    // 清理由于在线更新可能残留的旧实例和旧定时器
+    if (window._mingMapActiveCleanup) {
+        window._mingMapActiveCleanup();
     }
+    
+    // 启动地图
+    bootstrapMingMap();
+    
+    // 将清理函数暴露给全局，供下次更新时调用
+    window._mingMapActiveCleanup = cleanupMingMap;
 }
